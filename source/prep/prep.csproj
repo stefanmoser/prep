@@ -58,6 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bloom\BloomFilter.cs" />
+    <Compile Include="bloom\IHashStrings.cs" />
+    <Compile Include="bloom\MD5StringHasher.cs" />
     <Compile Include="collections\Genre.cs" />
     <Compile Include="collections\Movie.cs" />
     <Compile Include="collections\MovieLibrary.cs" />

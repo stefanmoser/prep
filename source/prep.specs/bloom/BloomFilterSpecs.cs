@@ -16,54 +16,36 @@ namespace prep.bloom
             protected static List<string> words = new List<string>(){"hi", "there", "develop", "with", "passion"};
             protected static List<string> not_words = new List<string>(){"asdf", "qwer", "ZXC", "hkghkj", "asdf"};
 
-            Establish context = () => bloom_filter = new BloomFilter();
+            protected static string existing_word = "passion";
+            protected static string non_existent_word = "blah_blah_blah";
+
+            Establish context = () => bloom_filter = new BloomFilter(new MD5StringHasher());
         }
 
-        public class when_initializing_with_no_words : bloom_filter_concern
+        public class given_a_fully_initialized_dictionary : bloom_filter_concern
         {
-           
-            private Because of = () => bloom_filter.initialize_with(dictionary);
-
-            private It should_not_match_words = () =>
-                                                    {
-                                                        foreach (var possible_word in words)
-                                                        {
-                                                            bool is_in_dictionary = bloom_filter.check_word_in_dictionary(possible_word);
-                                                            is_in_dictionary.ShouldBeFalse();
-                                                        }
-                                                    };
+            Establish context = () =>
+                                {
+                                    bloom_filter.initialize_with(words);
+                                };
         }
 
-        public class when_initializing_with_one_word : bloom_filter_concern
+        public class when_checking_the_dictionary_for_an_existing_word : given_a_fully_initialized_dictionary
         {
-            private Because of = () => bloom_filter.initialize_with(new[] {"regina"});
+            static bool is_word_in_dictionary;
 
-            private It should_match_the_word = () => bloom_filter.check_word_in_dictionary("regina").ShouldBeTrue();
+            Because of = () => is_word_in_dictionary = bloom_filter.check_for_word_in_dictionary(existing_word);
 
-            private It should_not_match_other_words = () =>
-                                                          {
-                                                              foreach (var possible_word in words)
-                                                              {
-                                                                  bloom_filter.check_word_in_dictionary(possible_word).ShouldBeFalse();
-                                                              }
-                                                          };
-            It should_not_match_an_empty_string = () =>
+            It should_match_the_word = () => is_word_in_dictionary.ShouldBeTrue();
         }
 
+        public class when_checking_the_dictionary_for_a_nonexistent_word : given_a_fully_initialized_dictionary
+        {
+            static bool is_word_in_dictionary;
 
+            Because of = () => is_word_in_dictionary = bloom_filter.check_for_word_in_dictionary(non_existent_word);
 
-//            public abstract class movie_library_concern : Observes<MovieLibrary>
-//    {
-//      protected static IList<Movie> movie_collection;
-//
-//      Establish c = () =>
-//      {
-//        movie_collection = new List<Movie>();
-//        depends.on(movie_collection);
-//      };
-//    };
-//
-//    public class when_iterating : movie_library_concern
-//    { 
+            It should_not_match_the_word = () => is_word_in_dictionary.ShouldBeFalse();
+        }
     }
 }
