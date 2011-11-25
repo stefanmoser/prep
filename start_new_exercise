@@ -23,4 +23,8 @@ exit_if_not_on_the_master_branch
 checkout(new_branch_name)
 `git pull jp master`
 puts "new branch name:#{new_branch_name}"
+auto-hot-key for automatically setting a standardized environment (ie. R# shortcuts, no VIM in studio etc)
 
+./fetch_latest
+
+IncomingRequest.has_imput_model_of<ViewDepartmentsRequest>()

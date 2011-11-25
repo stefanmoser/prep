@@ -1,7 +1,9 @@
-﻿namespace prep.bloom
+﻿using System.Collections.Generic;
+
+namespace prep.bloom
 {
     public interface IHashStrings
     {
-        int hash_word(string some_string);
+        IEnumerable<int> hash_word(string some_string);
     }
 }

@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 
 namespace prep.bloom
 {
     public class BloomFilter
     {
         readonly IHashStrings string_hasher;
-        List<int> array;
+        byte[] array;
+        const int array_size = 256;
 
         public BloomFilter(IHashStrings string_hasher)
         {
             this.string_hasher = string_hasher;
-            array = new List<int>();
+            array = new byte[array_size];
         }
 
         public void initialize_with(IEnumerable<string> dictionary)
@@ -25,28 +24,27 @@ namespace prep.bloom
 
         public bool check_for_word_in_dictionary(string possbile_word)
         {
-            int word_hash = string_hasher.hash_word(possbile_word);
-            ensure_array_size(word_hash);
-            return array[word_hash] == 1;
-        }
+            IEnumerable<int> word_hash = string_hasher.hash_word(possbile_word);
 
-        private void ensure_array_size(int index)
-        {
-            while (index >= array.Count)
+            foreach (var index in word_hash)
             {
-                array.Add(0);
+                if (array[index] == 0)
+                {
+                    return false;
+                }
             }
+
+            return true;
         }
 
         private void insert_word_into_hash(string word)
         {
-            int hash = string_hasher.hash_word(word);
-            ensure_array_size(hash);
+           IEnumerable< int> hash = string_hasher.hash_word(word);
 
-            Debug.WriteLine("Capacity: {0} Index: {1}", array.Count, hash);
-            Console.WriteLine("Capacity: {0} Index: {1}", array.Count, hash);
-
-            array[hash] = 1;
+            foreach (var index in hash)
+            {
+                array[index] = 1;
+            }
         }
     }
 }

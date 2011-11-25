@@ -75,6 +75,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bloom2\BloomFilterSpecs.cs" />
+    <Compile Include="bloom2\MD5StringHasherSpecs.cs" />
     <Compile Include="bloom\BloomFilterSpecs.cs" />
     <Compile Include="MovieLibrarySpecs.cs" />
     <Compile Include="utility\CollectionExtensions.cs" />
